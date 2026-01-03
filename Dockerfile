@@ -47,7 +47,7 @@ RUN apk add --no-cache msmtp perl procps shadow freetype icu libmcrypt-dev libpn
 
 RUN apk add --no-cache php-bcmath php-bz2 php-dom php-exif php-fileinfo php-ftp php-gd php-gettext \
     php-intl php-opcache php-pdo php-pdo_mysql php-pdo_pgsql php-shmop php-simplexml php-session \
-    php-sockets php-sysvmsg php-sysvsem php-sysvshm php-tokenizer php-xml php-xmlwriter
+    php-sockets php-sysvmsg php-sysvsem php-sysvshm php-tokenizer php-xml php-xmlwriter php83-xmlreader
 
 RUN apk add --no-cache --virtual build-essentials && \
     docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp && \
@@ -82,3 +82,4 @@ CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
 
 # Configure a healthcheck to validate that everything is up&running
 HEALTHCHECK --timeout=10s CMD curl --silent --fail http://127.0.0.1:9000/fpm-ping
+root@srv867910:~/upcontroller/docker-alpine-nginx-php8.3# 
