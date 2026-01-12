@@ -60,11 +60,11 @@ RUN pecl install redis && \
     docker-php-ext-enable redis
 
 # Install imagick
-# use github version for now until release from https://pecl.php.net/get/imagick is ready for PHP 8
-# ref: https://github.com/Imagick/imagick/issues/358
-RUN mkdir -p /usr/src/php/ext/imagick && \
-    curl -fsSL https://github.com/Imagick/imagick/archive/06116aa24b76edaf6b1693198f79e6c295eda8a9.tar.gz | tar xvz -C "/usr/src/php/ext/imagick" --strip 1 && \
-    docker-php-ext-install imagick && \
+# Try PECL first (latest stable), fallback to GitHub master if needed
+RUN (pecl install imagick || \
+     (mkdir -p /usr/src/php/ext/imagick && \
+      curl -fsSL https://github.com/Imagick/imagick/archive/master.tar.gz | tar xvz -C "/usr/src/php/ext/imagick" --strip 1 && \
+      docker-php-ext-install imagick)) && \
     docker-php-ext-enable imagick
 
 # Remove the build deps and clean out directories that don't need to be part of the image
