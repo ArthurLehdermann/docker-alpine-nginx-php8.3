@@ -39,28 +39,33 @@ RUN set -ex && apk --no-cache add postgresql-dev && \
     docker-php-ext-install pdo_pgsql pgsql && \
     docker-php-ext-enable pdo_pgsql
 
-# Add essential PHP extensions
+# Add essential PHP extensions and dependencies
 RUN apk add --no-cache msmtp perl procps shadow freetype icu libmcrypt-dev libpng-dev \
      icu-dev icu-libs zlib-dev g++ make automake autoconf libzip libpng libjpeg-turbo \
      libwebp libcurl curl-dev libxml2-dev libzip-dev libpng-dev libwebp-dev libjpeg-turbo-dev \
-     freetype-dev icu-dev gettext-dev
+     freetype-dev icu-dev gettext-dev imagemagick imagemagick-dev pcre-dev
 
 RUN apk add --no-cache php-bcmath php-bz2 php-dom php-exif php-fileinfo php-ftp php-gd php-gettext \
     php-intl php-opcache php-pdo php-pdo_mysql php-pdo_pgsql php-shmop php-simplexml php-session \
     php-sockets php-sysvmsg php-sysvsem php-sysvshm php-tokenizer php-xml php-xmlwriter php83-xmlreader
 
+# Build essentials for compiling extensions
 RUN apk add --no-cache --virtual build-essentials && \
     docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp && \
     docker-php-ext-install bcmath bz2 curl dom exif fileinfo ftp gd gettext intl opcache phar \
-      pdo pdo_mysql pdo_pgsql shmop simplexml sysvmsg sysvsem sysvshm xml xmlwriter zip && \
-    docker-php-ext-enable bcmath bz2 curl dom exif fileinfo ftp gd gettext intl opcache phar \
       pdo pdo_mysql pdo_pgsql shmop simplexml sysvmsg sysvsem sysvshm xml xmlwriter zip
 
-# install imagick
+# Install Redis PHP extension
+RUN pecl install redis && \
+    docker-php-ext-enable redis
+
+# Install imagick
 # use github version for now until release from https://pecl.php.net/get/imagick is ready for PHP 8
 # ref: https://github.com/Imagick/imagick/issues/358
 RUN mkdir -p /usr/src/php/ext/imagick && \
-    curl -fsSL https://github.com/Imagick/imagick/archive/06116aa24b76edaf6b1693198f79e6c295eda8a9.tar.gz | tar xvz -C "/usr/src/php/ext/imagick" --strip 1
+    curl -fsSL https://github.com/Imagick/imagick/archive/06116aa24b76edaf6b1693198f79e6c295eda8a9.tar.gz | tar xvz -C "/usr/src/php/ext/imagick" --strip 1 && \
+    docker-php-ext-install imagick && \
+    docker-php-ext-enable imagick
 
 # Remove the build deps and clean out directories that don't need to be part of the image
 RUN apk del build-essentials && rm -rf /usr/src/php* && rm -rf /tmp/* /var/tmp/*
