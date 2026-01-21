@@ -43,7 +43,7 @@ RUN set -ex && apk --no-cache add postgresql-dev && \
 RUN apk add --no-cache msmtp perl procps shadow freetype icu libmcrypt-dev libpng-dev \
      icu-dev icu-libs zlib-dev g++ make automake autoconf libzip libpng libjpeg-turbo \
      libwebp libcurl curl-dev libxml2-dev libzip-dev libpng-dev libwebp-dev libjpeg-turbo-dev \
-     freetype-dev icu-dev gettext-dev imagemagick imagemagick-dev pcre-dev
+     freetype-dev icu-dev gettext-dev imagemagick imagemagick-dev pcre-dev libsodium-dev
 
 RUN apk add --no-cache php-bcmath php-bz2 php-dom php-exif php-fileinfo php-ftp php-gd php-gettext \
     php-intl php-opcache php-pdo php-pdo_mysql php-pdo_pgsql php-shmop php-simplexml php-session \
@@ -53,7 +53,7 @@ RUN apk add --no-cache php-bcmath php-bz2 php-dom php-exif php-fileinfo php-ftp 
 RUN apk add --no-cache --virtual build-essentials && \
     docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp && \
     docker-php-ext-install bcmath bz2 curl dom exif fileinfo ftp gd gettext intl opcache phar \
-      pdo pdo_mysql pdo_pgsql shmop simplexml sysvmsg sysvsem sysvshm xml xmlwriter zip
+      pdo pdo_mysql pdo_pgsql shmop simplexml sysvmsg sysvsem sysvshm xml xmlwriter zip sodium
 
 # Install Redis PHP extension
 RUN pecl install redis && \
