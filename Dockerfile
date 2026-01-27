@@ -53,7 +53,7 @@ RUN apk add --no-cache php-bcmath php-bz2 php-dom php-exif php-fileinfo php-ftp 
 RUN apk add --no-cache --virtual build-essentials && \
     docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp && \
     docker-php-ext-install bcmath bz2 curl dom exif fileinfo ftp gd gettext intl opcache phar \
-      pdo pdo_mysql pdo_pgsql shmop simplexml sysvmsg sysvsem sysvshm xml xmlwriter zip sodium
+      pdo pdo_mysql pdo_pgsql shmop simplexml sysvmsg sysvsem sysvshm xml xmlwriter zip sodium pcntl posix
 
 # Install Redis PHP extension
 RUN pecl install redis && \
